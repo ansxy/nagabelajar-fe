@@ -14,7 +14,7 @@ export const Dropdown: React.FC<{ options: string[] }> = ({ options }) => {
       />
 
       {isOpen && (
-        <div className="absolute flex flex-col bg-white border-2 border-black rounded-lg p-2 top-11 items-center right-3 ">
+        <div className="absolute flex flex-col bg-white border-2 border-black rounded-lg p-2 top-11 items-center right-3 z-10">
           {options.map((option) => (
             <span
               onClick={() => {

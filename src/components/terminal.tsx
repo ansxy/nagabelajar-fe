@@ -17,12 +17,14 @@ export const TerminalBox: React.FC<TerminalBoxProps> = ({ code }) => {
     if (terminalRef.current) {
       terminalInstance.current = new Terminal({
         theme: {
-          foreground: "green",
+          foreground: "white",
         },
         cursorBlink: true,
         tabStopWidth: 4,
+        fontFamily: "Fira Code",
+        fontSize: 16,
       });
-      socket.current = io(`${import.meta.env.VITE_API_URL}playground`);
+      socket.current = io(`${import.meta.env.VITE_COMPILER_URL}playground`);
       terminalInstance.current.open(terminalRef.current);
       terminalInstance.current.write("Welcome To Sandbox x.x!\r\n");
 

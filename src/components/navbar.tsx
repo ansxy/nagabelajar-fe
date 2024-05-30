@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
           <Link to={"/course"} className="cursor-pointer font-semibold ">
             Course
           </Link>
-          <Link to={"/"} className="cursor-pointer font-semibold">
+          <Link to={"/certificate"} className="cursor-pointer font-semibold">
             Certificate
           </Link>
           <Link to={"/sandbox"} className="cursor-pointer font-semibold">

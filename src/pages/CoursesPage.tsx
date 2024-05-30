@@ -1,6 +1,11 @@
 import { Search } from "lucide-react";
-import { Card, CardProps } from "../components/card";
+import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import { Card } from "../components/card";
 import { Dropdown } from "../components/dropdown";
+import { BaseResponse } from "../types/BaseResponseType";
+import { Course } from "../types/CourseType";
+import axiosInstance from "../utils/axios";
 
 // type CourseFilter = {
 //   sort: string;
@@ -8,78 +13,75 @@ import { Dropdown } from "../components/dropdown";
 //   filter: string;
 // };
 
-const cardArray: CardProps[] = [
-  {
-    Code: "001",
-    Title: "Introduction to TypeScript",
-    Description:
-      "Learn the basics of TypeScript, a typed superset of JavaScript that compiles to plain JavaScript.",
-    Image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png",
-  },
-  {
-    Code: "002",
-    Title: "Advanced JavaScript",
-    Description:
-      "Deep dive into advanced concepts of JavaScript including closures, prototypes, and async programming.",
-    Image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png",
-  },
-  {
-    Code: "003",
-    Title: "Web Development with React",
-    Description:
-      "Build modern web applications using React, a popular JavaScript library for building user interfaces.",
-    Image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png",
-  },
-  {
-    Code: "004",
-    Title: "Node.js for Backend",
-    Description:
-      "Learn how to create scalable backend applications using Node.js and Express.",
-    Image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png",
-  },
-  {
-    Code: "005",
-    Title: "Database Design",
-    Description:
-      "Master the fundamentals of database design and SQL to manage and query data efficiently.",
-    Image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png",
-  },
-];
-
 export const CoursesPage: React.FC = () => {
   // const [courseFilter, setCourseFilter] = useState<CourseFilter>({
   //   sort: "",
   //   search: "",
   //   filter: "",
   // });
+  const loaderData = useLoaderData() as BaseResponse<Course[]>;
+  const [response, setResponse] = useState<BaseResponse<Course[]>>(loaderData);
+  const [search, setSearch] = useState<string>("");
+  // const [sort, setSort] = useState<string>("");
+
+  // const fetchCourses = async (search: string) => {
+  //   try {
+  //     const res = await axiosInstance.get<BaseResponse<Course[]>>(
+  //       `/admin/course?keyword=${search}`
+  //     );
+  //     setResponse(res as unknown as BaseResponse<Course[]>);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  useEffect(() => {
+    axiosInstance
+      .get<BaseResponse<Course[]>>(`/admin/course?keyword=${search}`)
+      .then((res) => {
+        setResponse(res as unknown as BaseResponse<Course[]>);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [search]);
 
   return (
-    <div className="flex w-[80%] md:w-[75%] flex-col justify-center items-center ">
+    //dbff29
+    <div className="flex w-[80%] md:w-[75%] flex-col justify-center items-center">
       <div className="flex w-full border-x-2 border-black">
-        <section className="flex  justify-start flex-row-reverse w-full border-b-2 border-black p-2 gap-5">
+        <section className="flex  justify-start flex-row-reverse w-full border-b-2 border-black p-2 gap-5 bg-[#feef06]">
           <div className="flex flex-row border-2 border-black py-2 px-5 rounded-full">
-            <input placeholder="Search Course" />
+            <input
+              placeholder="Search Course"
+              className="bg-inherit"
+              onChange={(e) => {
+                e.preventDefault();
+                setSearch(e.target.value);
+              }}
+            />
             <Search />
           </div>
           {/* filter dropwdonw */}
           <Dropdown options={["Newest", "Oldest"]} />
         </section>
       </div>
-      <section className="grid grid-cols-4 gap-5 px-10 py-5 border-x-2 border-b-2 border-black max-h-screen overflow-scroll w-full">
-        {cardArray.map((card) => (
-          <Card
-            key={card.Code}
-            Code={card.Code}
-            Description={card.Description}
-            Image={card.Image}
-            Title={card.Title}
-          />
-        ))}
+      <section className="grid grid-cols-4 gap-5 px-10 py-5 border-x-2  border-black max-h-screen overflow-scroll w-full bg-[#ececec] h-screen">
+        {response.data ? (
+          <>
+            {response.data.map((course) => (
+              <Card
+                key={course.code}
+                Id={course.course_id}
+                Description={course.description}
+                Image={course.media.url_media}
+                Title={course.name}
+              />
+            ))}
+          </>
+        ) : (
+          <span>Loading...</span>
+        )}
       </section>
     </div>
   );

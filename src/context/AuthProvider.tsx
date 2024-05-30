@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   GoogleAuthProvider,
   UserInfo,
@@ -8,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import auth from "../utils/FirebaseUtils";
 import { AuthContext } from "./AuthContext";
+import axiosInstance from "../utils/axios";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const AuthProvider: React.FC<any> = ({ children }) => {
@@ -18,18 +20,45 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
     setToken(firebaseToken || null);
   };
 
+  const loginWithGoolle = async () => {
+    await axiosInstance.post(
+      "/auth/google",
+      {
+        email: userData?.email,
+        name: userData?.displayName,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + auth.currentUser?.getIdToken(),
+        },
+      }
+    );
+  };
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUserData(user);
-      fetchToken();
     });
-  }, []);
+  });
+  // await axiosInstance.post(
+  //   "/auth/google",
+  //   {
+  //     email: userData?.email,
+  //     name: userData?.displayName,
+  //   },
+  //   {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   }
+  // );
 
   const login = async () => {
     try {
       setPersistence(auth, browserSessionPersistence);
       await signInWithPopup(auth, new GoogleAuthProvider());
-      fetchToken();
+      await fetchToken().then(() => {
+        loginWithGoolle();
+      });
     } catch {
       setToken(null);
     }

@@ -3,9 +3,17 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider.tsx";
 import "./index.css";
 import { BaseLayout } from "./layouts/BaseLayout.tsx";
+import { CertificatePage } from "./pages/CertificatePage.tsx";
+import { CourseDetailPage } from "./pages/CourseDetailPage.tsx";
+import { CoursePage } from "./pages/CoursePage.tsx";
 import { CoursesPage } from "./pages/CoursesPage.tsx";
 import { Dashboard } from "./pages/DashboardPage.tsx";
 import { SandBox } from "./pages/SandboxPage";
+import {
+  CourseLoader,
+  GetCourseDetailLoader,
+  GetOneCourseLoader,
+} from "./service/courseService.ts";
 
 const router = createBrowserRouter([
   {
@@ -22,16 +30,37 @@ const router = createBrowserRouter([
         element: <SandBox />,
       },
       {
+        path: "/certificate",
+        element: <CertificatePage />,
+      },
+      {
         path: "/course",
         children: [
           {
             path: "/course",
             index: true,
             element: <CoursesPage />,
+            loader: CourseLoader,
           },
           {
             path: "/course/:id",
-            element: <h1>Course Details</h1>,
+            children: [
+              {
+                path: "/course/:id",
+                index: true,
+                element: <CoursePage />,
+                loader: ({ params, request }) => {
+                  return GetOneCourseLoader({ params, request });
+                },
+              },
+              {
+                path: "/course/:id/:contentId",
+                element: <CourseDetailPage />,
+                loader: ({ params, request }) => {
+                  return GetCourseDetailLoader({ params, request });
+                },
+              },
+            ],
           },
         ],
       },
