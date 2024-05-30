@@ -12,7 +12,6 @@ type Tab = {
 
 export const SandBox: React.FC = () => {
   const defaultCode = `#Code Here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n`;
-
   const [tabs, setTabs] = useState([
     {
       id: 1,
@@ -24,6 +23,7 @@ export const SandBox: React.FC = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [editingTabId, setEditingTabId] = useState<number | null>(null);
   const [newTabName, setNewTabName] = useState("");
+  // const [syntaxError ,setSyntaxError] = useState([""])
 
   const addTab = () => {
     const newTab = {
@@ -65,18 +65,20 @@ export const SandBox: React.FC = () => {
       <section className="flex flex-row border-b-2 border-black">
         <ul className="flex flex-row-reverse">
           <li
-            className="font-thin text-lg text-blue-600 border-r-2 border-gray-400 cursor-pointer"
+            className="font-thin text-sm text-blue-600 border-r-2 border-gray-400 cursor-pointer"
             onClick={addTab}
           >
-            <span className="flex justify-center p-2">
-              <Plus absoluteStrokeWidth /> Add Tab
+            <span className="flex justify-center items-center p-2 gap-1">
+              <Plus width={"14px"} /> Add Tab
             </span>
           </li>
           {tabs.map((tab) => (
             <li
               key={tab.id}
-              className={`font-thin text-lg flex text-gray-300 border-r-2 border-gray-400 cursor-pointer ${
-                tab.id === activeTab.id ? "bg-gray-200 text-blue-700" : ""
+              className={`font-thin text-lg flex   border-r-2 border-gray-400 cursor-pointer ${
+                tab.id === activeTab.id
+                  ? "bg-gray-200 text-blue-600"
+                  : "text-gray-400"
               }`}
               onClick={() => switchTab(tab)}
             >
@@ -102,7 +104,7 @@ export const SandBox: React.FC = () => {
               )}
             </li>
           ))}
-          <li className="font-thin text-lg text-gray-300 flex border-r-2 border-gray-400 cursor-pointer">
+          <li className="font-thin text-sm text-gray-300 flex flex-col justify-center border-r-2 border-gray-400 cursor-pointer">
             <span className="p-2 ">SCRIPTS</span>
           </li>
         </ul>
