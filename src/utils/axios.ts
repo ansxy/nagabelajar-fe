@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     // Do something with response data
-    return response.data;
+    return response;
   },
   (error) => {
     // Do something with response error

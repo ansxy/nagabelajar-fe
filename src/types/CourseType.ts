@@ -11,11 +11,21 @@ export interface Course {
   author: string;
   created_at: string;
   updated_at: string;
+  is_enrolled: boolean;
 
   deleted_at: string;
   category: Category;
   media: Media;
   course_detail: CourseDetail[];
+  progress: Progress[];
+}
+
+export interface Progress {
+  progress_id: number;
+  user_id: string;
+  course_id: number;
+  course_detail_id: number;
+  is_finished: boolean;
 }
 
 export interface CourseDetail {

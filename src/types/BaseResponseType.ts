@@ -1,4 +1,6 @@
-export interface BaseResponse<T> {
+import { Course } from "./CourseType";
+
+export interface BaseResponse<T = void> {
   success: boolean;
   paging: Paging;
   data: T;
@@ -18,4 +20,17 @@ export interface Error {
   code: number;
   status: number;
   message: string;
+}
+
+export interface Certificate {
+  certificate_id: string;
+  user_id: string;
+  file_name: string;
+  file_url: string;
+  md5: string;
+  blockchain_address: string;
+  created_at: string;
+  updated_at: string;
+  delete_at: string;
+  course: Course;
 }

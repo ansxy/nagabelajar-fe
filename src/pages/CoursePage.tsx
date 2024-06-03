@@ -1,10 +1,26 @@
-import { ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { BaseResponse } from "../types/BaseResponseType";
 import { Course } from "../types/CourseType";
 
 export const CoursePage: React.FC = () => {
   const response = useLoaderData() as BaseResponse<Course>;
+  const [continueID, setContinueID] = useState<number>(0);
+
+  useEffect(() => {
+    if (response.data.is_enrolled) {
+      let found = false;
+      response.data.progress.map((content) => {
+        if (!content.is_finished && !found) {
+          found;
+          setContinueID(content.course_detail_id);
+          found = true;
+        }
+      });
+    }
+  }, [response.data.is_enrolled, response.data.progress]);
+
   return (
     <div className="flex w-[80%] md:w-[75%] flex-col justify-center items-center">
       <div className="flex flex-col w-full border-x-2 border-black border-b-2  items-center justify-center gap-10">
@@ -43,6 +59,26 @@ export const CoursePage: React.FC = () => {
             ))}
           </ul>
         </section>
+
+        <div className="flex flex-row cursor-pointer relative mb-10">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 transform translate-x-[5px] translate-y-[5px]  border border-black opacity-90"></div>
+            <div className="relative z-10 text-white bg-black font-bold">
+              <p className="px-8 py-3 flex gap-2">
+                {response.data.is_enrolled ? (
+                  <Link to={`${continueID}`}>
+                    <span>Continue</span>
+                  </Link>
+                ) : (
+                  "Enroll Now"
+                )}
+                <span>
+                  <ArrowRight />
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

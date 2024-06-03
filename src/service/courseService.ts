@@ -8,7 +8,8 @@ export const CourseLoader: LoaderFunction = async () => {
     const response = await axiosInstance.get<BaseResponse<Course[]>>(
       "/admin/course"
     );
-    return response;
+
+    return response.data.data;
   } catch (error) {
     throw new Response("Failed to fetch data");
   }
@@ -17,9 +18,14 @@ export const CourseLoader: LoaderFunction = async () => {
 export const GetOneCourseLoader: LoaderFunction = async ({ params }) => {
   try {
     const response = await axiosInstance.get<BaseResponse<Course>>(
-      `/admin/course/${params.id}`
+      `/course/${params.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
-    return response;
+    return response.data;
   } catch (error) {
     throw new Response("Failed to fetch data");
   }
@@ -28,9 +34,9 @@ export const GetOneCourseLoader: LoaderFunction = async ({ params }) => {
 export const GetCourseDetailLoader: LoaderFunction = async ({ params }) => {
   try {
     const response = await axiosInstance.get<BaseResponse<Course>>(
-      `/admin/course/${params.contentId}/detail`
+      `/course/detail/${params.contentId}`
     );
-    return response;
+    return response.data;
   } catch (error) {
     throw new Response("Failed to fetch data");
   }

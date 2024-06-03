@@ -8,7 +8,9 @@ import { CourseDetailPage } from "./pages/CourseDetailPage.tsx";
 import { CoursePage } from "./pages/CoursePage.tsx";
 import { CoursesPage } from "./pages/CoursesPage.tsx";
 import { Dashboard } from "./pages/DashboardPage.tsx";
+import { ProfilePage } from "./pages/ProfilePage.tsx";
 import { SandBox } from "./pages/SandboxPage";
+import { CertificateLoader } from "./service/certificateService.ts";
 import {
   CourseLoader,
   GetCourseDetailLoader,
@@ -32,6 +34,11 @@ const router = createBrowserRouter([
       {
         path: "/certificate",
         element: <CertificatePage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+        loader: CertificateLoader,
       },
       {
         path: "/course",
@@ -73,9 +80,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </>
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 );

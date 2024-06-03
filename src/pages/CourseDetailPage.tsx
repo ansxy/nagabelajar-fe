@@ -1,6 +1,5 @@
 import React from "react";
-import Markdown from "react-markdown";
-import { Components } from "react-markdown/lib/ast-to-react";
+import Markdown, { Components } from "react-markdown";
 import { useLoaderData } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -10,31 +9,27 @@ import ExerciseComponent from "../components/exercise";
 import { BaseResponse } from "../types/BaseResponseType";
 import { CourseDetail } from "../types/CourseType";
 
+const CodeBlock = ({
+  language,
+  children,
+}: {
+  language?: string;
+  children: React.ReactNode;
+}) => (
+  <SyntaxHighlighter style={vscDarkPlus} language={language} PreTag="div">
+    {String(children).replace(/\n$/, "")}
+  </SyntaxHighlighter>
+);
+
 export const CourseDetailPage: React.FC = () => {
   const response = useLoaderData() as BaseResponse<CourseDetail>;
 
   const renderers: Components = {
-    code({
-      inline,
-      className,
-      children,
-      ...props
-    }: {
-      inline: boolean;
-      className: string;
-      children: React.ReactNode;
-      props: unknown;
-    }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    code: ({ inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || "");
       return !inline && match ? (
-        <SyntaxHighlighter
-          style={vscDarkPlus}
-          language={match[1]}
-          PreTag="div"
-          {...props}
-        >
-          {String(children).replace(/\n$/, "")}
-        </SyntaxHighlighter>
+        <CodeBlock language={match[1]}>{children}</CodeBlock>
       ) : (
         <code className={className} {...props}>
           {children}
