@@ -9,4 +9,10 @@ export default defineConfig({
     port: 8080, // Ensure this matches the port exposed in your Dockerfile
   },
   envPrefix: ["VITE_API_URL", "VITE_COMPILER_URL"],
+  define: {
+    "process.env.VITE_API_URL": JSON.stringify(process.env.VITE_API_URL),
+    "process.env.VITE_COMPILER_URL": JSON.stringify(
+      process.env.VITE_COMPILER_URL
+    ),
+  },
 });
