@@ -1,6 +1,6 @@
 import React from "react";
 import Markdown, { Components } from "react-markdown";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeRaw from "rehype-raw";
@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import ExerciseComponent from "../components/exercise";
 import { BaseResponse } from "../types/BaseResponseType";
 import { CourseDetail } from "../types/CourseType";
+import axiosInstance from "../utils/axios";
 
 const CodeBlock = ({
   language,
@@ -23,6 +24,7 @@ const CodeBlock = ({
 
 export const CourseDetailPage: React.FC = () => {
   const response = useLoaderData() as BaseResponse<CourseDetail>;
+  const navigate = useNavigate();
 
   const renderers: Components = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,6 +38,25 @@ export const CourseDetailPage: React.FC = () => {
         </code>
       );
     },
+  };
+
+  const handleFinishCourse = () => {
+    const res = axiosInstance.post(
+      `/certificate`,
+      {
+        course_id: response.data.course_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    res.then((res) => {
+      if (res.status === 200) {
+        navigate("/profile");
+      }
+    });
   };
 
   return (
@@ -68,6 +89,31 @@ export const CourseDetailPage: React.FC = () => {
             ))}
           </React.Fragment>
         ))}
+      </section>
+      <section className="flex w-full flex-col">
+        <div className="flex w-full items-center justify-center bg-green-600">
+          <h1 className="p-4 text-white font-bold text-2xl">Assigment</h1>
+        </div>
+        <div className="flex w-full flex-col p-4">
+          <ul className="flex flex-col gap-2 w-full">
+            {response.data.assigment.map((assigment) => (
+              <li
+                key={assigment.assigment_id}
+                className="flex flex-row gap-2 border-2 border-gray-500 p-2 w-full justify-between items-center cursor-pointer hover:bg-gray-200 transition duration-150 ease-in-out"
+              >
+                {assigment.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+      <section className="flex w-full flex-row-reverse">
+        <span
+          className="bg-green-400 cursor-pointer"
+          onClick={() => handleFinishCourse()}
+        >
+          <p className="font-bold text-2xl px-4 py-2">SELESAI</p>
+        </span>
       </section>
     </div>
   );

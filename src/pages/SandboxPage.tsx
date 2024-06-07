@@ -1,8 +1,11 @@
 import { python } from "@codemirror/lang-python";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TerminalBox } from "../components/terminal";
+import { useAuthContext } from "../hooks/AuthHook";
+import { GetListCourse } from "../service/courseService";
+import { Assigment, Course, CourseDetail } from "../types/CourseType";
 
 type Tab = {
   id: number;
@@ -11,6 +14,7 @@ type Tab = {
 };
 
 export const SandBox: React.FC = () => {
+  const { token } = useAuthContext();
   const defaultCode = `#Code Here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n`;
   const [tabs, setTabs] = useState([
     {
@@ -20,12 +24,37 @@ export const SandBox: React.FC = () => {
     },
   ]);
 
+  const [courses, setCourses] = useState<CourseDetail[]>();
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [assignments, setAssignments] = useState<Assigment[]>([]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [editingTabId, setEditingTabId] = useState<number | null>(null);
   const [newTabName, setNewTabName] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("Course 1");
+  const [desc, setDesc] = useState<string>("");
 
-  const courses = ["Course 1", "Course 2", "Course 3"];
+  useEffect(() => {
+    if (!token) return;
+    const fetchCourses = async () => {
+      const data = await GetListCourse();
+      if (data.length > 0) {
+        data.map((course: Course) => {
+          setCourses(course.course_detail);
+        });
+      }
+    };
+
+    fetchCourses();
+  }, [token]);
+
+  const handleCourseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const course_id = parseInt(event.target.value, 10);
+    setSelectedCourse(course_id);
+    const selectedCourseDetails = courses?.find(
+      (c) => c.course_detail_id === course_id
+    );
+    setDesc("");
+    setAssignments(selectedCourseDetails?.assigment || []);
+  };
 
   const addTab = () => {
     const newTab = {
@@ -68,10 +97,6 @@ export const SandBox: React.FC = () => {
     if (newTabs.length > 0) {
       setActiveTab(newTabs[0]);
     }
-  };
-
-  const handleCourseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCourse(event.target.value);
   };
 
   return (
@@ -122,22 +147,48 @@ export const SandBox: React.FC = () => {
             <span className="ml-1">Add Tab</span>
           </li>
         </ul>
-        <div className="border-l-2 border-black w-[20%] p-1">
+        <div className="border-l-2 border-black w-[30%]  flex flex-row gap-4">
           <select
-            className="w-full p-1 border border-gray-400 rounded"
-            value={selectedCourse}
+            className="w-full border-gray-400 flex h-full p-2"
+            value={selectedCourse ?? ""}
             onChange={handleCourseChange}
           >
-            {courses.map((course) => (
-              <option key={course} value={course}>
-                {course}
+            <option value="">Select a course</option>
+            {!courses ? (
+              <></>
+            ) : (
+              <>
+                {courses.map((course) => (
+                  <option
+                    key={course.course_detail_id}
+                    value={course.course_detail_id}
+                  >
+                    {course.name}
+                  </option>
+                ))}
+              </>
+            )}
+          </select>
+          <select
+            className="w-full border-gray-400 flex h-full p-2"
+            onChange={(e) =>
+              setDesc(e.target.value === "" ? "" : assignments[0].description)
+            }
+          >
+            <option value="">Select an assignment</option>
+            {assignments.map((assignment) => (
+              <option
+                key={assignment.assigment_id}
+                value={assignment.assigment_id}
+              >
+                {assignment.title}
               </option>
             ))}
           </select>
         </div>
       </section>
-      <section className="border-b-2 border-black flex flex-row">
-        <div className="flex w-[80%]">
+      <section className="border-b-2 border-black flex flex-row w-full">
+        <div className="flex flex-row w-[80%]">
           <ReactCodeMirror
             value={activeTab.code}
             theme={"none"}
@@ -145,12 +196,13 @@ export const SandBox: React.FC = () => {
             extensions={[python()]}
             minHeight="500px"
             maxHeight="550px"
+            className="w-full"
             onChange={(value) => {
               updateCode(value);
             }}
           />
         </div>
-        <div className="w-[20%] border-l-2 border-black">asdsa</div>
+        <div className="w-[30%] border-l-2 border-black">{desc}</div>
       </section>
       <section className="border-b-2 border-black w-full">
         <ul className="flex flex-row">

@@ -1,5 +1,5 @@
 import { ArrowUpRight, Menu } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/AuthHook";
 
@@ -24,6 +24,12 @@ const Navbar: React.FC = () => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+    if (!userData) {
+      localStorage.removeItem("token");
+    }
+  }, [userData]);
 
   return (
     <nav className="sticky top-0 z-40 flex flex-row justify-between p-4 border-b-2 border-black items-center bg-[#f3f3f3]">

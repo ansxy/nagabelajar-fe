@@ -3,6 +3,7 @@ import "@xterm/xterm/css/xterm.css"; // Import the xterm.css for styling
 import { PlayIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Socket, io } from "socket.io-client";
+import { UpdateProgress } from "../service/courseService";
 
 interface TerminalBoxProps {
   code: string;
@@ -27,9 +28,7 @@ export const TerminalBox: React.FC<TerminalBoxProps> = ({ code }) => {
       socket.current = io(`${import.meta.env.VITE_COMPILER_URL}playground`);
       terminalInstance.current.open(terminalRef.current);
       terminalInstance.current.write("Welcome To Sandbox x.x!\r\n");
-
       socket.current.on("output", (data) => {
-        //if data have any word of error turn the color to red
         if (data.includes("Error")) {
           terminalInstance.current?.write("\x1b[31m" + data + "\x1b[0m");
         } else {
@@ -53,8 +52,9 @@ export const TerminalBox: React.FC<TerminalBoxProps> = ({ code }) => {
   }, []);
 
   const runCode = () => {
+    UpdateProgress("3");
     if (socket.current) {
-      socket.current.emit("RunCode", code);
+      socket.current.emit("TestCode", code);
     }
   };
 

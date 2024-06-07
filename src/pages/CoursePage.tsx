@@ -1,15 +1,37 @@
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 import { BaseResponse } from "../types/BaseResponseType";
 import { Course } from "../types/CourseType";
+import axiosInstance from "../utils/axios";
 
 export const CoursePage: React.FC = () => {
+  const token = localStorage.getItem("token");
+  const { id } = useParams();
+  console.log(id);
+
   const response = useLoaderData() as BaseResponse<Course>;
   const [continueID, setContinueID] = useState<number>(0);
+  const [modal, setModal] = useState<boolean>(false);
+  const handleEnroll = () => {
+    if (token !== null) {
+      const res = axiosInstance.post(
+        `/course/${id}/enroll`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+    }
+
+    setModal(true);
+  };
 
   useEffect(() => {
-    if (response.data.is_enrolled) {
+    if (response.data.is_enrolled && response.data.progress) {
       let found = false;
       response.data.progress.map((content) => {
         if (!content.is_finished && !found) {
@@ -48,7 +70,11 @@ export const CoursePage: React.FC = () => {
               <Link
                 key={index}
                 to={`${content.course_detail_id}`}
-                className="flex flex-row gap-2 border-2 border-gray-500 p-2 w-full justify-between items-center cursor-pointer hover:bg-gray-200 transition duration-150 ease-in-out"
+                className={`flex flex-row gap-2 border-2 border-gray-500 p-2 w-full justify-between items-center ${
+                  response.data.is_enrolled
+                    ? "cursor-pointer"
+                    : "cursor-none pointer-events-none"
+                } hover:bg-gray-200 transition duration-150 ease-in-out`}
               >
                 <span className="font-bold">{content.name}</span>
                 <span>
@@ -65,12 +91,12 @@ export const CoursePage: React.FC = () => {
             <div className="absolute inset-0 transform translate-x-[5px] translate-y-[5px]  border border-black opacity-90"></div>
             <div className="relative z-10 text-white bg-black font-bold">
               <p className="px-8 py-3 flex gap-2">
-                {response.data.is_enrolled ? (
+                {response.data.is_enrolled && response.data.progress ? (
                   <Link to={`${continueID}`}>
                     <span>Continue</span>
                   </Link>
                 ) : (
-                  "Enroll Now"
+                  <span onClick={() => handleEnroll()}>Enroll Now</span>
                 )}
                 <span>
                   <ArrowRight />
@@ -80,6 +106,19 @@ export const CoursePage: React.FC = () => {
           </div>
         </div>
       </div>
+      {modal && (
+        <div
+          className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50"
+          onClick={() => setModal(false)}
+        >
+          <div
+            className="bg-white p-5 rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Need Login First
+          </div>
+        </div>
+      )}
     </div>
   );
 };

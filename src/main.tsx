@@ -8,6 +8,7 @@ import { CourseDetailPage } from "./pages/CourseDetailPage.tsx";
 import { CoursePage } from "./pages/CoursePage.tsx";
 import { CoursesPage } from "./pages/CoursesPage.tsx";
 import { Dashboard } from "./pages/DashboardPage.tsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
 import { ProfilePage } from "./pages/ProfilePage.tsx";
 import { SandBox } from "./pages/SandboxPage";
 import { CertificateLoader } from "./service/certificateService.ts";
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <BaseLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -61,7 +63,7 @@ const router = createBrowserRouter([
                 },
               },
               {
-                path: "/course/:id/:contentId",
+                path: "/course/:id/:course_detail_id",
                 element: <CourseDetailPage />,
                 loader: ({ params, request }) => {
                   return GetCourseDetailLoader({ params, request });

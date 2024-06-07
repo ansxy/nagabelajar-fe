@@ -17,11 +17,7 @@ export const CertificatePage: React.FC = () => {
     setLoading(true);
     try {
       await axiosInstance
-        .get(`/certificate/validate?address=${address}`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
+        .get(`/public/certificate/validate?address=${address}`)
         .then((response) => {
           if (response.data === "0x0000000000000000000000000000000000000000") {
             setValidationResult("Certificate is not valid");
@@ -59,7 +55,7 @@ export const CertificatePage: React.FC = () => {
       const formData = new FormData();
       formData.append("file", acceptedFiles[0]);
       axiosInstance
-        .post<BaseResponse>("/certificate/validate", formData, {
+        .post<BaseResponse>("/public/certificate/validate", formData, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
             "Content-Type": "multipart/form-data",

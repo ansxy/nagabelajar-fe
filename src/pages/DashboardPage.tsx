@@ -1,9 +1,15 @@
-import { ArrowRight, Radio, Sparkle, VenetianMask } from "lucide-react";
+import {
+  ArrowRight,
+  Origami,
+  Radio,
+  Sparkle,
+  VenetianMask,
+} from "lucide-react";
 import React, { useEffect, useRef } from "react";
 import Typed from "typed.js";
 import DashboardImage from "../assets/Dashboard-removebg.png";
+import abstract from "../assets/abstract.webp";
 import Realibity from "../assets/realibity.webp";
-
 export const Dashboard: React.FC = () => {
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -81,7 +87,7 @@ export const Dashboard: React.FC = () => {
         <VenetianMask size={64} className="text-white" />
         <VenetianMask size={64} className="text-white" />
       </div>
-      <div className="flex flex-col items-center gap-8 py-20 bg-[#edfaca] w-full">
+      <div className="flex flex-col items-center gap-8 py-40 bg-[#edfaca] w-full ">
         <section className="flex flex-col items-center text-center">
           <h1 className="font-bold text-2xl md:text-3xl text-black tracking-widest">
             Programming Course
@@ -116,7 +122,7 @@ export const Dashboard: React.FC = () => {
         <section className="flex flex-wrap justify-center gap-8 px-5">
           <div className="flex flex-col w-[200px]">
             <figure className="rounded-xl w-full border-2 border-gray-600 overflow-hidden">
-              <img src="https://via.placeholder.com/200" alt="Course" />
+              <img src={abstract} alt="Course" />
             </figure>
             <h2 className="font-bold text-xl md:text-2xl mt-4">Beginners</h2>
             <p className="text-sm md:text-base">
@@ -125,7 +131,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="flex flex-col w-[200px]">
             <figure className="rounded-xl w-full border-2 border-gray-600 overflow-hidden">
-              <img src="https://via.placeholder.com/200" alt="Course" />
+              <img src={abstract} alt="Course" />
             </figure>
             <h2 className="font-bold text-xl md:text-2xl mt-4">Intermediate</h2>
             <p className="text-sm md:text-base">
@@ -134,7 +140,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="flex flex-col w-[200px]">
             <figure className="rounded-xl w-full border-2 border-gray-600 overflow-hidden">
-              <img src="https://via.placeholder.com/200" alt="Course" />
+              <img src={abstract} alt="Course" />
             </figure>
             <h2 className="font-bold text-xl md:text-2xl mt-4">Advanced</h2>
             <p className="text-sm md:text-base">
@@ -143,7 +149,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="flex flex-col w-[200px]">
             <figure className="rounded-xl border-2 border-gray-600 overflow-hidden">
-              <img src="https://via.placeholder.com/200" alt="Course" />
+              <img src={abstract} alt="Course" />
             </figure>
             <span className="flex flex-col flex-wrap">
               <h2 className="font-bold text-xl md:text-2xl mt-4">Expert</h2>
@@ -154,19 +160,19 @@ export const Dashboard: React.FC = () => {
           </div>
         </section>
       </div>
-      <div className="flex flex-row w-full justify-between px-10 bg-[#88ac20] py-5">
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
-        <VenetianMask size={64} className="text-white" />
+      <div className="flex flex-row w-full justify-between px-10 bg-[#cec324] py-5">
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
+        <Origami size={64} className="text-white" />
       </div>
-      <div className="flex flex-col md:flex-row w-full justify-between items-end  border-black">
+      <div className="flex flex-col md:flex-row w-full justify-between items-end  border-black py-20">
         <section className="flex flex-col pl-5 md:pl-40 pb-10 md:pb-20">
           <h2 className="font-bold text-3xl md:text-4xl">Realibity</h2>
           <div className="flex flex-col md:flex-row gap-10 md:gap-20 items-end">
@@ -208,10 +214,14 @@ export const Dashboard: React.FC = () => {
         <Radio size={64} className="text-white" />
         <Radio size={64} className="text-white" />
       </div>
-      <div className="flex flex-col bg-[#ff5f5fe7] w-full">
-        <section className="">
-          <h1 className="tracking-wider text-3xl font-bold ">How It Works</h1>
+      <div className="flex flex-col bg-[#ff5f5fe7] w-full text-white">
+        <section className="flex justify-center p-12 flex-col items-center gap-4">
+          <h1 className="tracking-widest text-5xl font-bold  uppercase">
+            How It Works
+          </h1>
+          <p>Blockchain certificate </p>
         </section>
+        <section className=""></section>
       </div>
     </div>
   );

@@ -35,6 +35,19 @@ export interface CourseDetail {
   position: number;
   course_id: number;
   content: Content[];
+  assigment: Assigment[];
+}
+
+export interface Assigment {
+  assigment_id: number;
+  title: string;
+  description: string;
+  course_detail_id: number;
+  base_code: string;
+  testing_code: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
 }
 
 export interface Category {

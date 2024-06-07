@@ -11,7 +11,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#49ae92] flex w-full justify-center overflow-hidden">
-      <section className="w-full max-w-[95%] md:max-w-[80%] lg:max-w-[60%] xl:max-w-[40%] border-2 bg-[#1d2321] border-[#3acda5] mt-20">
+      <section className="w-full max-w-[95%] md:max-w-[80%] lg:max-w-[60%] xl:max-w-[40%] border-2 bg-[#1d2321] border-[#3acda5] my-10">
         <div className="flex flex-row bg-[#1d2321] justify-between px-5 md:px-10 py-2 md:py-4">
           <EyeIcon size={48} className="text-[#49ae92]" />
           <EyeIcon size={48} className="text-[#49ae92]" />
@@ -34,7 +34,7 @@ export const ProfilePage: React.FC = () => {
         </div>
         <div className="flex flex-row justify-between px-5 md:px-10 py-2 md:py-4 bg-[#1d2321] text-[#3acda5]">
           <div className="flex flex-col items-center">
-            <h2 className="text-base md:text-lg font-medium">
+            <h2 className="uppercase  md:text-2xl font-bold text-2xl ">
               {userData?.displayName}
             </h2>
           </div>
